@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    @OnClick(R.id.upgradeButton)
     protected void loadUpgradeActivity(View v) {
         Intent intent_info = new Intent(MainActivity.this,UpgradeActivity.class);
         startActivity(intent_info);
