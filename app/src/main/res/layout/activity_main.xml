@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/main_layout"
     tools:context="com.example.paul.beerclicker.MainActivity">
 
 
@@ -16,15 +17,6 @@
         android:layout_marginTop="90dp"
         android:text="Welcome To Beer Clicker" />
 
-    <Button
-        android:id="@+id/getBeerBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="75dp"
-        android:text="Get Beer" />
-
     <TextView
         android:id="@+id/beerCounter"
         android:layout_width="wrap_content"
@@ -32,4 +24,16 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:text="0" />
+
+    <Button
+        android:id="@+id/upgradeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="12dp"
+        android:layout_toEndOf="@+id/welcomeText"
+        android:onClick=""
+        android:text="UPGRADE" />
+
 </RelativeLayout>

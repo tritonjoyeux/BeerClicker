@@ -1,6 +1,7 @@
 package com.example.paul.beerclicker;
 
 import android.content.ComponentCallbacks2;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        beerCounter = (TextView)findViewById(R.id.beerCounter);
+        this.beerCounter = (TextView)findViewById(R.id.beerCounter);
 
         SharedPreferences sharedPref= getSharedPreferences(PREFS_NAME, 0);
 
@@ -32,34 +33,41 @@ public class MainActivity extends AppCompatActivity {
 
             if (!savedBeerCounter.equals("0"))
             {
-                beerCounter.setText(savedBeerCounter);
+                this.beerCounter.setText(savedBeerCounter);
             }
         }
 
         ButterKnife.bind(this);
     }
 
-    @OnClick(R.id.getBeerBtn)
+    @OnClick(R.id.main_layout)
     public void submit(View view) {
-        String count = beerCounter.getText().toString();
+        SharedPreferences sharedPref= getSharedPreferences(PREFS_NAME, 0);
 
-        int intBeerCounter = Integer.parseInt(count);
+        String savedBeerCounter = sharedPref.getString("beerCounter", "");
+
+        int intBeerCounter = Integer.parseInt(savedBeerCounter);
         intBeerCounter++;
 
         beerCounter.setText(String.valueOf(intBeerCounter));
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("beerCounter", String.valueOf(intBeerCounter));
+
+        editor.commit();
+    }
+
+    protected void loadUpgradeActivity(View v) {
+        Intent intent_info = new Intent(MainActivity.this,UpgradeActivity.class);
+        startActivity(intent_info);
+        overridePendingTransition(R.anim.slide_up,R.anim.no_change);
     }
 
     @Override
-    protected void onStop(){
-        super.onStop();
-
-        // We need an Editor object to make preference changes.
-        // All objects are from android.context.Context
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("beerCounter", beerCounter.getText().toString());
-
-        // Commit the edits!
-        editor.commit();
+    public void onRestart() {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
     }
 }
