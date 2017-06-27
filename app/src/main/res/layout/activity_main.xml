@@ -26,6 +26,15 @@
         android:text="0" />
 
     <Button
+        android:id="@+id/increButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27dp"
+        android:text="BEER"
+        android:layout_below="@+id/beerCounter"
+        android:layout_centerHorizontal="true" />
+
+    <Button
         android:id="@+id/upgradeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

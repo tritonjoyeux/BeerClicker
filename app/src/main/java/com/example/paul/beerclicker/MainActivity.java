@@ -3,6 +3,7 @@ package com.example.paul.beerclicker;
 import android.content.ComponentCallbacks2;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick(R.id.main_layout)
+    @OnClick(R.id.increButton)
     public void submit(View view) {
         SharedPreferences sharedPref= getSharedPreferences(PREFS_NAME, 0);
 
