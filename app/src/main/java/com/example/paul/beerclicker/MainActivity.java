@@ -24,21 +24,47 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.beerCounter = (TextView)findViewById(R.id.beerCounter);
+        this.beerCounter = (TextView) findViewById(R.id.beerCounter);
 
-        SharedPreferences sharedPref= getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
 
-        if (sharedPref.contains("beerCounter"))
-        {
+        if (sharedPref.contains("beerCounter")) {
             String savedBeerCounter = sharedPref.getString("beerCounter", "");
 
-            if (!savedBeerCounter.equals("0"))
-            {
+            if (!savedBeerCounter.equals("0")) {
                 this.beerCounter.setText(savedBeerCounter);
             }
         }
 
-        ButterKnife.bind(this);
+        final Handler ha=new Handler();
+        ha.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                timer();
+                ha.postDelayed(this, 1000);
+            }
+        }, 1000);
+    }
+
+    protected void timer() {
+        SharedPreferences sharedPref= getSharedPreferences(PREFS_NAME, 0);
+
+        String savedBeerCounter = sharedPref.getString("beerCounter", "");
+        int intBeerCounter = Integer.parseInt(savedBeerCounter);
+
+        String houblonCounter = sharedPref.getString("houblonCounter", "");
+        int intHoublonCounter = Integer.parseInt(houblonCounter);
+
+        intBeerCounter += intHoublonCounter;
+
+        beerCounter.setText(String.valueOf(intBeerCounter));
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("beerCounter", String.valueOf(intBeerCounter));
+
+        editor.commit();
     }
 
     @OnClick(R.id.increButton)
