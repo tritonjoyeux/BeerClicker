@@ -3,6 +3,7 @@ package com.example.paul.beerclicker;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -46,7 +47,29 @@ public class UpgradeActivity extends AppCompatActivity {
             }
         }
 
+        final Handler ha = new Handler();
+        ha.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                refresh();
+                ha.postDelayed(this, 300);
+            }
+        }, 300);
+
         ButterKnife.bind(this);
+    }
+
+    private void refresh(){
+        SharedPreferences sharedPref= getSharedPreferences(PREFS_NAME, 0);
+        int intBeerCounter = 0;
+
+        if (sharedPref.contains("beerCounter")) {
+            String savedBeerCounter = sharedPref.getString("beerCounter", "");
+            intBeerCounter = Integer.parseInt(savedBeerCounter);
+        }
+
+        beerCounter.setText("You have : " + String.valueOf(intBeerCounter) + " beers");
     }
 
     @OnClick(R.id.backBtn)

@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        final Handler ha=new Handler();
+        final Handler ha = new Handler();
         ha.postDelayed(new Runnable() {
 
             @Override
@@ -45,24 +45,32 @@ public class MainActivity extends AppCompatActivity {
                 ha.postDelayed(this, 1000);
             }
         }, 1000);
+
+        ButterKnife.bind(this);
     }
 
     protected void timer() {
         SharedPreferences sharedPref= getSharedPreferences(PREFS_NAME, 0);
+        int intBeerCounter = 0;
+        int intHoublonCounter = 0;
 
-        String savedBeerCounter = sharedPref.getString("beerCounter", "");
-        int intBeerCounter = Integer.parseInt(savedBeerCounter);
+        if (sharedPref.contains("beerCounter") && sharedPref.contains("houblonCounter")) {
 
-        String houblonCounter = sharedPref.getString("houblonCounter", "");
-        int intHoublonCounter = Integer.parseInt(houblonCounter);
+            String savedBeerCounter = sharedPref.getString("beerCounter", "");
+            intBeerCounter = Integer.parseInt(savedBeerCounter);
 
-        intBeerCounter += intHoublonCounter;
+            String houblonCounter = sharedPref.getString("houblonCounter", "");
+            intHoublonCounter = Integer.parseInt(houblonCounter);
+
+            intBeerCounter += intHoublonCounter;
+        }
 
         beerCounter.setText(String.valueOf(intBeerCounter));
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("beerCounter", String.valueOf(intBeerCounter));
+        editor.putString("houblonCounter", String.valueOf(intHoublonCounter));
 
         editor.commit();
     }
