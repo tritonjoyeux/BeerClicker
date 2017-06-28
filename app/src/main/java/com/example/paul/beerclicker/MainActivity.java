@@ -28,6 +28,12 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
 
+        SharedPreferences.Editor editor = sharedPref.edit();
+        if (!sharedPref.contains("isRunning")) {
+            editor.putString("isRunning", "false");
+            editor.commit();
+        }
+
         if (sharedPref.contains("beerCounter")) {
             String savedBeerCounter = sharedPref.getString("beerCounter", "");
 
@@ -36,12 +42,26 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        if(sharedPref.getString("isRunning", "").equals("false")) {
+            editor.putString("isRunning", "true");
+            editor.commit();
+            final Handler ha = new Handler();
+            ha.postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    timer();
+                    ha.postDelayed(this, 1000);
+                }
+            }, 1000);
+        }
+
         final Handler ha = new Handler();
         ha.postDelayed(new Runnable() {
 
             @Override
             public void run() {
-                timer();
+                refresh();
                 ha.postDelayed(this, 1000);
             }
         }, 1000);
@@ -65,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
             intBeerCounter += intHoublonCounter;
         }
 
-        beerCounter.setText(String.valueOf(intBeerCounter));
-
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("beerCounter", String.valueOf(intBeerCounter));
@@ -75,9 +93,21 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    private void refresh(){
+        SharedPreferences sharedPref= getSharedPreferences(PREFS_NAME, 0);
+        int intBeerCounter = 0;
+
+        if (sharedPref.contains("beerCounter")) {
+            String savedBeerCounter = sharedPref.getString("beerCounter", "");
+            intBeerCounter = Integer.parseInt(savedBeerCounter);
+        }
+
+        beerCounter.setText(String.valueOf(intBeerCounter));
+    }
+
     @OnClick(R.id.increButton)
     public void submit(View view) {
-        SharedPreferences sharedPref= getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
 
         String savedBeerCounter = sharedPref.getString("beerCounter", "");
 
@@ -86,8 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         beerCounter.setText(String.valueOf(intBeerCounter));
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        SharedPreferences.Editor editor = settings.edit();
+        SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("beerCounter", String.valueOf(intBeerCounter));
 
         editor.commit();
@@ -105,5 +134,14 @@ public class MainActivity extends AppCompatActivity {
         super.onRestart();
         finish();
         startActivity(getIntent());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("isRunning", "false");
+        editor.commit();
     }
 }

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ public class UpgradeActivity extends AppCompatActivity {
                 this.houblonCounter.setText(savedHoublonCounter);
             }
         }
+        Log.d("coucou", sharedPref.getString("isRunning", ""));
 
         final Handler ha = new Handler();
         ha.postDelayed(new Runnable() {
@@ -53,9 +55,9 @@ public class UpgradeActivity extends AppCompatActivity {
             @Override
             public void run() {
                 refresh();
-                ha.postDelayed(this, 300);
+                ha.postDelayed(this, 1000);
             }
-        }, 300);
+        }, 1000);
 
         ButterKnife.bind(this);
     }
@@ -103,5 +105,14 @@ public class UpgradeActivity extends AppCompatActivity {
 
             editor.commit();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("isRunning", "false");
+        editor.commit();
     }
 }
