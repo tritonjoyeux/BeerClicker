@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 this.beerCounter.setText(savedBeerCounter);
             }
         }
+        Log.d("coucou", sharedPref.getString("isRunning", ""));
 
         if(sharedPref.getString("isRunning", "").equals("false")) {
             editor.putString("isRunning", "true");
@@ -107,6 +111,9 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.increButton)
     public void submit(View view) {
+        ImageButton btn = (ImageButton) findViewById(R.id.increButton);
+        Animation scale = AnimationUtils.loadAnimation(this, R.anim.shake);
+        btn.startAnimation(scale);
         SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
 
         String savedBeerCounter = sharedPref.getString("beerCounter", "");

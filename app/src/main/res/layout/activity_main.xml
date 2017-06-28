@@ -26,17 +26,6 @@
         android:text="0" />
 
     <Button
-        android:id="@+id/increButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
-        android:text="BEER"
-        android:layout_below="@+id/beerCounter"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
         android:id="@+id/reset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,5 +44,17 @@
         android:layout_marginTop="12dp"
         android:layout_toEndOf="@+id/welcomeText"
         android:text="UPGRADE" />
+
+    <ImageButton
+        android:id="@+id/increButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="@mipmap/ic_action_incre"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/beerCounter"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
