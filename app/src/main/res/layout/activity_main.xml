@@ -35,6 +35,16 @@
         android:layout_centerHorizontal="true" />
 
     <Button
+        android:id="@+id/reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RESET"
+        android:layout_alignBaseline="@+id/upgradeButton"
+        android:layout_alignBottom="@+id/upgradeButton"
+        android:layout_toStartOf="@+id/welcomeText"
+        android:layout_marginEnd="12dp" />
+
+    <Button
         android:id="@+id/upgradeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -129,11 +129,14 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_up,R.anim.no_change);
     }
 
-    @Override
-    public void onRestart() {
-        super.onRestart();
-        finish();
-        startActivity(getIntent());
+    @OnClick(R.id.reset)
+    protected void reset() {
+        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("beerCounter", String.valueOf(0));
+        editor.putString("houblonCounter", String.valueOf(0));
+        beerCounter.setText(String.valueOf(0));
+        editor.commit();
     }
 
     @Override
