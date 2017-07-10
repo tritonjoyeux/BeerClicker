@@ -1,14 +1,13 @@
 package com.example.paul.beerclicker;
 
 import java.util.Calendar;
-import android.content.ComponentCallbacks2;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -22,8 +21,11 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
+    final Handler ha2 = new Handler();
+    final Handler ha = new Handler();
     public static final String PREFS_NAME = "MyPrefsFile";
-    @BindView(R.id.beerCounter) TextView beerCounter;
+    @BindView(R.id.beerCounter)
+    TextView beerCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
 
-        SharedPreferences.Editor editor = sharedPref.edit();
-        if (!sharedPref.contains("isRunning")) {
-            editor.putString("isRunning", "false");
-            editor.commit();
-        }
-
         if (sharedPref.contains("beerCounter")) {
             String savedBeerCounter = sharedPref.getString("beerCounter", "");
-
             if (!savedBeerCounter.equals("0")) {
                 this.beerCounter.setText(savedBeerCounter);
             }
@@ -56,10 +51,10 @@ public class MainActivity extends AppCompatActivity {
             Calendar c = Calendar.getInstance();
             int seconds = c.get(Calendar.SECOND);
 
-            if(seconds - secondStop > 30){
+            if (seconds - secondStop > 30) {
                 incre = welcomeBack(30);
-            }else if(seconds - secondStop <= 30 && seconds - secondStop >= 0){
-                incre = welcomeBack(seconds -  secondStop);
+            } else if (seconds - secondStop <= 30 && seconds - secondStop >= 0) {
+                incre = welcomeBack(seconds - secondStop);
             }
 
             Context context = getApplicationContext();
@@ -70,27 +65,19 @@ public class MainActivity extends AppCompatActivity {
             toast.show();
         }
 
-        if(sharedPref.getString("isRunning", "").equals("false")) {
-            editor.putString("isRunning", "true");
-            editor.commit();
-            final Handler ha = new Handler();
-            ha.postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    timer();
-                    ha.postDelayed(this, 1000);
-                }
-            }, 1000);
-        }
-
-        final Handler ha = new Handler();
         ha.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                timer();
+                ha.postDelayed(this, 1000);
+            }
+        }, 1000);
 
+        ha2.postDelayed(new Runnable() {
             @Override
             public void run() {
                 refresh();
-                ha.postDelayed(this, 1000);
+                ha2.postDelayed(this, 1000);
             }
         }, 1000);
 
@@ -98,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected int welcomeBack(int seconds) {
-        SharedPreferences sharedPref= getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
         int intHoublonCounter = 0;
         int intBeerCounter = 0;
 
@@ -117,11 +104,11 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("beerCounter", String.valueOf(intBeerCounter));
 
-        return intHoublonCounter*seconds;
+        return intHoublonCounter * seconds;
     }
 
     protected void timer() {
-        SharedPreferences sharedPref= getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
         int intBeerCounter = 0;
         int intHoublonCounter = 0;
 
@@ -148,8 +135,8 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    private void refresh(){
-        SharedPreferences sharedPref= getSharedPreferences(PREFS_NAME, 0);
+    private void refresh() {
+        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
         int intBeerCounter = 0;
 
         if (sharedPref.contains("beerCounter")) {
@@ -182,9 +169,10 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.upgradeButton)
     protected void loadUpgradeActivity(View v) {
-        Intent intent_info = new Intent(MainActivity.this,UpgradeActivity.class);
+        Intent intent_info = new Intent(MainActivity.this, UpgradeActivity.class);
+        intent_info.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent_info);
-        overridePendingTransition(R.anim.slide_up,R.anim.no_change);
+        overridePendingTransition(R.anim.slide_up, R.anim.no_change);
     }
 
     @OnClick(R.id.reset)
@@ -200,9 +188,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("isRunning", "false");
-        editor.commit();
+        ha.removeCallbacksAndMessages(null);
+        ha2.removeCallbacksAndMessages(null);
     }
 }

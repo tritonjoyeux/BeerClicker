@@ -1,12 +1,9 @@
 package com.example.paul.beerclicker;
 
-import java.util.Calendar;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,41 +14,38 @@ import butterknife.OnClick;
 public class UpgradeActivity extends AppCompatActivity {
 
     public static final String PREFS_NAME = "MyPrefsFile";
-    @BindView(R.id.beerCounter) TextView beerCounter;
-    @BindView(R.id.houblonCounter) TextView houblonCounter;
+    @BindView(R.id.beerCounter)
+    TextView beerCounter;
+    @BindView(R.id.houblonCounter)
+    TextView houblonCounter;
+    final Handler ha = new Handler();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.upgrade_activity);
 
-        this.beerCounter = (TextView)findViewById(R.id.beerCounter);
-        this.houblonCounter = (TextView)findViewById(R.id.houblonCounter);
+        this.beerCounter = (TextView) findViewById(R.id.beerCounter);
+        this.houblonCounter = (TextView) findViewById(R.id.houblonCounter);
 
-        SharedPreferences sharedPref= getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
 
-        if (sharedPref.contains("beerCounter"))
-        {
+        if (sharedPref.contains("beerCounter")) {
             String savedBeerCounter = sharedPref.getString("beerCounter", "");
 
-            if (!savedBeerCounter.equals("0"))
-            {
+            if (!savedBeerCounter.equals("0")) {
                 this.beerCounter.setText("You have : " + savedBeerCounter + " beers");
             }
         }
 
-        if (sharedPref.contains("houblonCounter"))
-        {
+        if (sharedPref.contains("houblonCounter")) {
             String savedHoublonCounter = sharedPref.getString("houblonCounter", "");
 
-            if (!savedHoublonCounter.equals("0"))
-            {
+            if (!savedHoublonCounter.equals("0")) {
                 this.houblonCounter.setText(savedHoublonCounter);
             }
         }
 
-        final Handler ha = new Handler();
         ha.postDelayed(new Runnable() {
-
             @Override
             public void run() {
                 refresh();
@@ -62,8 +56,8 @@ public class UpgradeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    private void refresh(){
-        SharedPreferences sharedPref= getSharedPreferences(PREFS_NAME, 0);
+    private void refresh() {
+        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
         int intBeerCounter = 0;
 
         if (sharedPref.contains("beerCounter")) {
@@ -82,7 +76,7 @@ public class UpgradeActivity extends AppCompatActivity {
 
     @OnClick(R.id.buyHoublonBtn)
     protected void buyHoublon(View v) {
-        SharedPreferences sharedPref= getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
 
         String houblonCounter = sharedPref.getString("houblonCounter", "");
 
@@ -90,7 +84,7 @@ public class UpgradeActivity extends AppCompatActivity {
 
         Integer beers = Integer.parseInt(savedBeerCounter);
 
-        if(beers >= 50){
+        if (beers >= 50) {
             beers = beers - 50;
             int intHoublonCounter = Integer.parseInt(houblonCounter);
             intHoublonCounter++;
@@ -110,9 +104,6 @@ public class UpgradeActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("isRunning", "false");
-        editor.commit();
+        ha.removeCallbacksAndMessages(null);
     }
 }
