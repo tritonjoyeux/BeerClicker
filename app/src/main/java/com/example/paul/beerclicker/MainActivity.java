@@ -1,6 +1,8 @@
 package com.example.paul.beerclicker;
 
+import java.util.Calendar;
 import android.content.ComponentCallbacks2;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -12,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,7 +47,28 @@ public class MainActivity extends AppCompatActivity {
                 this.beerCounter.setText(savedBeerCounter);
             }
         }
-        Log.d("coucou", sharedPref.getString("isRunning", ""));
+
+        if (sharedPref.contains("stopTime")) {
+            int incre = 0;
+            String secondsText = sharedPref.getString("stopTime", "");
+            int secondStop = Integer.parseInt(secondsText);
+
+            Calendar c = Calendar.getInstance();
+            int seconds = c.get(Calendar.SECOND);
+
+            if(seconds - secondStop > 30){
+                incre = welcomeBack(30);
+            }else if(seconds - secondStop <= 30 && seconds - secondStop >= 0){
+                incre = welcomeBack(seconds -  secondStop);
+            }
+
+            Context context = getApplicationContext();
+            CharSequence text = "You have win " + String.valueOf(incre) + " beers";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
 
         if(sharedPref.getString("isRunning", "").equals("false")) {
             editor.putString("isRunning", "true");
@@ -73,6 +97,29 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
+    protected int welcomeBack(int seconds) {
+        SharedPreferences sharedPref= getSharedPreferences(PREFS_NAME, 0);
+        int intHoublonCounter = 0;
+        int intBeerCounter = 0;
+
+        if (sharedPref.contains("beerCounter") && sharedPref.contains("houblonCounter")) {
+
+            String savedBeerCounter = sharedPref.getString("beerCounter", "");
+            intBeerCounter = Integer.parseInt(savedBeerCounter);
+
+            String houblonCounter = sharedPref.getString("houblonCounter", "");
+            intHoublonCounter = Integer.parseInt(houblonCounter);
+
+            intBeerCounter += intHoublonCounter * seconds;
+        }
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("beerCounter", String.valueOf(intBeerCounter));
+
+        return intHoublonCounter*seconds;
+    }
+
     protected void timer() {
         SharedPreferences sharedPref= getSharedPreferences(PREFS_NAME, 0);
         int intBeerCounter = 0;
@@ -89,10 +136,14 @@ public class MainActivity extends AppCompatActivity {
             intBeerCounter += intHoublonCounter;
         }
 
+        Calendar c = Calendar.getInstance();
+        int seconds = c.get(Calendar.SECOND);
+
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("beerCounter", String.valueOf(intBeerCounter));
         editor.putString("houblonCounter", String.valueOf(intHoublonCounter));
+        editor.putString("stopTime", String.valueOf(seconds));
 
         editor.commit();
     }

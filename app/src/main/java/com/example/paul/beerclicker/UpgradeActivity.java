@@ -1,5 +1,6 @@
 package com.example.paul.beerclicker;
 
+import java.util.Calendar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -47,7 +48,6 @@ public class UpgradeActivity extends AppCompatActivity {
                 this.houblonCounter.setText(savedHoublonCounter);
             }
         }
-        Log.d("coucou", sharedPref.getString("isRunning", ""));
 
         final Handler ha = new Handler();
         ha.postDelayed(new Runnable() {
