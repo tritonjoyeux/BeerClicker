@@ -18,6 +18,9 @@ public class UpgradeActivity extends AppCompatActivity {
     TextView beerCounter;
     @BindView(R.id.houblonCounter)
     TextView houblonCounter;
+    @BindView(R.id.pubCounter)
+    TextView pubCounter;
+
     final Handler ha = new Handler();
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +29,7 @@ public class UpgradeActivity extends AppCompatActivity {
 
         this.beerCounter = (TextView) findViewById(R.id.beerCounter);
         this.houblonCounter = (TextView) findViewById(R.id.houblonCounter);
+        this.pubCounter = (TextView) findViewById(R.id.pubCounter);
 
         SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
 
@@ -42,6 +46,14 @@ public class UpgradeActivity extends AppCompatActivity {
 
             if (!savedHoublonCounter.equals("0")) {
                 this.houblonCounter.setText(savedHoublonCounter);
+            }
+        }
+
+        if (sharedPref.contains("pubCounter")) {
+            String savedPubCounter = sharedPref.getString("pubCounter", "");
+
+            if (!savedPubCounter.equals("0")) {
+                this.pubCounter.setText(savedPubCounter);
             }
         }
 
@@ -95,6 +107,33 @@ public class UpgradeActivity extends AppCompatActivity {
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString("houblonCounter", String.valueOf(intHoublonCounter));
+            editor.putString("beerCounter", String.valueOf(beers));
+
+            editor.commit();
+        }
+    }
+
+    @OnClick(R.id.buyPubBtn)
+    protected void buyPub(View v) {
+        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
+
+        String pubCounter = sharedPref.getString("pubCounter", "");
+
+        String savedBeerCounter = sharedPref.getString("beerCounter", "");
+
+        Integer beers = Integer.parseInt(savedBeerCounter);
+
+        if (beers >= 500) {
+            beers = beers - 500;
+            int intPubCounter = Integer.parseInt(pubCounter);
+            intPubCounter++;
+
+            this.pubCounter.setText(String.valueOf(intPubCounter));
+            this.beerCounter.setText(String.valueOf("You have : " + beers + " beers"));
+
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString("pubCounter", String.valueOf(intPubCounter));
             editor.putString("beerCounter", String.valueOf(beers));
 
             editor.commit();

@@ -49,11 +49,12 @@
         android:id="@+id/houblonCounter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="49dp"
+        android:text="0"
         android:layout_alignBaseline="@+id/houblonPrice"
         android:layout_alignBottom="@+id/houblonPrice"
         android:layout_toEndOf="@+id/houblonPrice"
-        android:layout_marginLeft="49dp"
-        android:text="0" />
+        android:layout_marginStart="37dp" />
 
     <TextView
         android:id="@+id/beerCounter"
@@ -64,5 +65,42 @@
         android:layout_marginTop="31dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/buyPubBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:text="BUY"
+        android:layout_below="@+id/buyHoublonBtn"
+        android:layout_alignStart="@+id/buyHoublonBtn" />
+
+    <TextView
+        android:id="@+id/pubText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pub"
+        android:layout_marginStart="13dp"
+        android:layout_alignBaseline="@+id/buyPubBtn"
+        android:layout_alignBottom="@+id/buyPubBtn"
+        android:layout_alignStart="@+id/beerCounter" />
+
+    <TextView
+        android:id="@+id/pubPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="500 beers"
+        android:layout_alignBaseline="@+id/pubText"
+        android:layout_alignBottom="@+id/pubText"
+        android:layout_toStartOf="@+id/houblonCounter" />
+
+    <TextView
+        android:id="@+id/pubCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:layout_alignBaseline="@+id/pubPrice"
+        android:layout_alignBottom="@+id/pubPrice"
+        android:layout_alignStart="@+id/houblonCounter" />
 
 </RelativeLayout>

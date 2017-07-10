@@ -57,4 +57,13 @@
         android:layout_below="@+id/beerCounter"
         android:layout_alignParentStart="true" />
 
+    <TextView
+        android:id="@+id/productionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/welcomeText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="53dp"
+        android:text="0 beers / second" />
+
 </RelativeLayout>

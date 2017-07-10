@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "MyPrefsFile";
     @BindView(R.id.beerCounter)
     TextView beerCounter;
+    @BindView(R.id.productionText)
+    TextView production;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +90,9 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
         int intHoublonCounter = 0;
         int intBeerCounter = 0;
+        int intPubCounter = 0;
 
-        if (sharedPref.contains("beerCounter") && sharedPref.contains("houblonCounter")) {
+        if (sharedPref.contains("beerCounter") && sharedPref.contains("houblonCounter") && sharedPref.contains("pubCounter")) {
 
             String savedBeerCounter = sharedPref.getString("beerCounter", "");
             intBeerCounter = Integer.parseInt(savedBeerCounter);
@@ -97,7 +100,10 @@ public class MainActivity extends AppCompatActivity {
             String houblonCounter = sharedPref.getString("houblonCounter", "");
             intHoublonCounter = Integer.parseInt(houblonCounter);
 
-            intBeerCounter += intHoublonCounter * seconds;
+            String pubCounter = sharedPref.getString("pubCounter", "");
+            intPubCounter = Integer.parseInt(pubCounter);
+
+            intBeerCounter += (intHoublonCounter * seconds) + (intPubCounter * 10 *seconds);
         }
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -111,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
         int intBeerCounter = 0;
         int intHoublonCounter = 0;
+        int intPubCounter = 0;
 
         if (sharedPref.contains("beerCounter") && sharedPref.contains("houblonCounter")) {
 
@@ -120,7 +127,12 @@ public class MainActivity extends AppCompatActivity {
             String houblonCounter = sharedPref.getString("houblonCounter", "");
             intHoublonCounter = Integer.parseInt(houblonCounter);
 
-            intBeerCounter += intHoublonCounter;
+            String pubCounter = sharedPref.getString("pubCounter", "");
+            intPubCounter = Integer.parseInt(pubCounter);
+
+            production.setText(String.valueOf(intHoublonCounter + (intPubCounter * 10) + " beers / second"));
+
+            intBeerCounter += intHoublonCounter + (intPubCounter * 10);
         }
 
         Calendar c = Calendar.getInstance();
@@ -130,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("beerCounter", String.valueOf(intBeerCounter));
         editor.putString("houblonCounter", String.valueOf(intHoublonCounter));
+        editor.putString("pubCounter", String.valueOf(intPubCounter));
         editor.putString("stopTime", String.valueOf(seconds));
 
         editor.commit();
@@ -181,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("beerCounter", String.valueOf(0));
         editor.putString("houblonCounter", String.valueOf(0));
+        editor.putString("pubCounter", String.valueOf(0));
         beerCounter.setText(String.valueOf(0));
         editor.commit();
     }
