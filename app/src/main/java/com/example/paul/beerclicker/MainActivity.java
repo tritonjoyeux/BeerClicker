@@ -53,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
             Calendar c = Calendar.getInstance();
             int seconds = c.get(Calendar.SECOND);
 
-            if (seconds - secondStop > 30) {
-                incre = welcomeBack(30);
-            } else if (seconds - secondStop <= 30 && seconds - secondStop >= 0) {
+            if (seconds - secondStop > 3600) {
+                incre = welcomeBack(3600);
+            } else if (seconds - secondStop <= 3600 && seconds - secondStop >= 0) {
                 incre = welcomeBack(seconds - secondStop);
             }
 
@@ -103,14 +103,14 @@ public class MainActivity extends AppCompatActivity {
             String pubCounter = sharedPref.getString("pubCounter", "");
             intPubCounter = Integer.parseInt(pubCounter);
 
-            intBeerCounter += (intHoublonCounter * seconds) + (intPubCounter * 10 *seconds);
+            intBeerCounter += (intHoublonCounter * seconds) + (intPubCounter * 10 * seconds);
         }
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("beerCounter", String.valueOf(intBeerCounter));
 
-        return intHoublonCounter * seconds;
+        return (intHoublonCounter * seconds) + (intPubCounter * 10 * seconds);
     }
 
     protected void timer() {
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
             intBeerCounter = Integer.parseInt(savedBeerCounter);
         }
 
-        beerCounter.setText(String.valueOf(intBeerCounter));
+        beerCounter.setText(String.valueOf(intBeerCounter + " beers"));
     }
 
     @OnClick(R.id.increButton)
@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         int intBeerCounter = Integer.parseInt(savedBeerCounter);
         intBeerCounter++;
 
-        beerCounter.setText(String.valueOf(intBeerCounter));
+        beerCounter.setText(String.valueOf(intBeerCounter + " beers"));
 
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("beerCounter", String.valueOf(intBeerCounter));
@@ -195,7 +195,9 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("beerCounter", String.valueOf(0));
         editor.putString("houblonCounter", String.valueOf(0));
         editor.putString("pubCounter", String.valueOf(0));
-        beerCounter.setText(String.valueOf(0));
+        editor.putString("houblonPrice", String.valueOf(50));
+        editor.putString("pubPrice", String.valueOf(500));
+        beerCounter.setText(String.valueOf(0 + " beers"));
         editor.commit();
     }
 
