@@ -191,6 +191,7 @@ public class UpgradeActivity extends AppCompatActivity {
             this.beerCounter.setText(String.valueOf("You have : " + beers + " beers"));
 
             intPubPrice += intPubPrice * 0.3;
+            pubPrice.setText(String.valueOf(intPubPrice + " beers"));
 
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
